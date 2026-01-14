@@ -1,5 +1,5 @@
-export let epoch = 0
+export let epoch = 0;
 
 export function tick() {
-  epoch++
+  epoch++;
 }

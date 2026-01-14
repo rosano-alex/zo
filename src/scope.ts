@@ -2,10 +2,9 @@ import type { Node } from "./node";
 import { NodeFlags } from "./node";
 import type { PulseNode } from "./pulse";
 
-
-// ##################
+// #################################
 // Effect Keys
-// ##################
+// #################################
 
 /**
  * EffectKey
@@ -53,10 +52,9 @@ export function defineEffect<T = any, R = void>(name: string): EffectKey<T, R> {
   return Symbol(name) as EffectKey<T, R>;
 }
 
-
-// ##################
+// #################################
 // Built-in Effects
-// ##################
+// #################################
 
 /**
  * ERROR
@@ -71,7 +69,7 @@ export function defineEffect<T = any, R = void>(name: string): EffectKey<T, R> {
  *     // Calling resume() would continue after the throw point.
  *   })
  */
-export const ERROR = defineEffect<Error, void>('error');
+export const ERROR = defineEffect<Error, void>("error");
 
 /**
  * DISPOSE
@@ -80,7 +78,7 @@ export const ERROR = defineEffect<Error, void>('error');
  * final cleanup, flush pending writes, or log diagnostics before
  * owned nodes are torn down.
  */
-export const DISPOSE = defineEffect<Scope, void>('dispose');
+export const DISPOSE = defineEffect<Scope, void>("dispose");
 
 /**
  * TRANSACTION
@@ -93,12 +91,11 @@ export const DISPOSE = defineEffect<Scope, void>('dispose');
  *     resume()
  *   })
  */
-export const TRANSACTION = defineEffect<() => void, void>('transaction');
+export const TRANSACTION = defineEffect<() => void, void>("transaction");
 
-
-// ##################
+// #################################
 // Handler type
-// ##################
+// #################################
 
 /**
  * An effect handler function installed on a scope via scope.handle().
@@ -115,13 +112,12 @@ export const TRANSACTION = defineEffect<() => void, void>('transaction');
  */
 export type EffectHandler<T = any, R = void> = (
   payload: T,
-  resume: (value: R) => void
+  resume: (value: R) => void,
 ) => void;
 
-
-// ##################
+// #################################
 // Scope
-// ##################
+// #################################
 
 /**
  * Scope
@@ -170,7 +166,6 @@ export type EffectHandler<T = any, R = void> = (
  *   })
  */
 export class Scope {
-
   /**
    * The parent scope in the ownership tree, or null for the root scope.
    *
@@ -220,14 +215,12 @@ export class Scope {
    */
   disposed = false;
 
-
   constructor(parent: Scope | null = null) {
     this.parent = parent;
     if (parent) {
       parent.children.add(this);
     }
   }
-
 
   /**
    * run()
@@ -245,7 +238,7 @@ export class Scope {
    */
   run<T>(fn: () => T): T {
     if (this.disposed) {
-      throw new Error('Cannot run in a disposed scope');
+      throw new Error("Cannot run in a disposed scope");
     }
 
     setActiveScope(this);
@@ -256,7 +249,6 @@ export class Scope {
       setActiveScope(null);
     }
   }
-
 
   /**
    * fork()
@@ -271,11 +263,10 @@ export class Scope {
    */
   fork(): Scope {
     if (this.disposed) {
-      throw new Error('Cannot fork a disposed scope');
+      throw new Error("Cannot fork a disposed scope");
     }
     return new Scope(this);
   }
-
 
   /**
    * handle()
@@ -293,17 +284,13 @@ export class Scope {
    * @param handler - The function to call when the effect is performed.
    * @returns This scope (for chaining).
    */
-  handle<T, R>(
-    key: EffectKey<T, R>,
-    handler: EffectHandler<T, R>
-  ): this {
+  handle<T, R>(key: EffectKey<T, R>, handler: EffectHandler<T, R>): this {
     if (this.disposed) {
-      throw new Error('Cannot install handler on a disposed scope');
+      throw new Error("Cannot install handler on a disposed scope");
     }
     this.handlers.set(key as symbol, handler);
     return this;
   }
-
 
   /**
    * perform()
@@ -360,10 +347,9 @@ export class Scope {
 
     throw new Error(
       `Unhandled effect: ${String(key)}. ` +
-      `Install a handler via scope.handle() on an ancestor scope.`
+        `Install a handler via scope.handle() on an ancestor scope.`,
     );
   }
-
 
   /**
    * own()
@@ -378,11 +364,10 @@ export class Scope {
    */
   own(node: Node | PulseNode<any>): void {
     if (this.disposed) {
-      throw new Error('Cannot register node on a disposed scope');
+      throw new Error("Cannot register node on a disposed scope");
     }
     this.ownedNodes.add(node);
   }
-
 
   /**
    * disown()
@@ -397,7 +382,6 @@ export class Scope {
   disown(node: Node | PulseNode<any>): void {
     this.ownedNodes.delete(node);
   }
-
 
   /**
    * onCleanup()
@@ -419,7 +403,6 @@ export class Scope {
     }
     this.cleanups.push(fn);
   }
-
 
   /**
    * dispose()
@@ -460,14 +443,14 @@ export class Scope {
 
     // 3. Dispose owned nodes.
     for (const node of this.ownedNodes) {
-      if ('dispose' in node && typeof node.dispose === 'function') {
+      if ("dispose" in node && typeof node.dispose === "function") {
         // EffectNode — has dispose()
         node.dispose();
-      } else if ('flags' in node) {
+      } else if ("flags" in node) {
         // ComputedNode — mark disposed and clear observers
         (node as Node).flags |= NodeFlags.DIRTY;
         (node as unknown as PulseNode<any>).observers.length = 0;
-      } else if ('observers' in node) {
+      } else if ("observers" in node) {
         // pulseNode — clear observers
         node.observers.length = 0;
       }
@@ -494,10 +477,9 @@ export class Scope {
   }
 }
 
-
-// ##################
+// #################################
 // Active scope tracking
-// ##################
+// #################################
 
 /**
  * The scope stack mirrors the observer stack in context.ts.
@@ -526,10 +508,9 @@ function setActiveScope(scope: Scope | null) {
   }
 }
 
-
-// ##################
+// #################################
 // Convenience API
-// ##################
+// #################################
 
 /**
  * createScope()
@@ -559,7 +540,7 @@ export function perform<T, R>(key: EffectKey<T, R>, payload: T): R | undefined {
   if (!activeScope) {
     throw new Error(
       `perform() called outside of any scope. ` +
-      `Wrap your code in scope.run() to establish a scope context.`
+        `Wrap your code in scope.run() to establish a scope context.`,
     );
   }
   return activeScope.perform(key, payload);
@@ -577,7 +558,7 @@ export function onCleanup(fn: () => void): void {
   if (!activeScope) {
     throw new Error(
       `onCleanup() called outside of any scope. ` +
-      `Wrap your code in scope.run() to establish a scope context.`
+        `Wrap your code in scope.run() to establish a scope context.`,
     );
   }
   activeScope.onCleanup(fn);

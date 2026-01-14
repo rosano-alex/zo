@@ -1,17 +1,16 @@
-import { ComputedNode } from "./computed"
-import { PulseNode } from "./pulse"
-import * as React from "react"
-import { useRef, useState, useEffect, useMemo, useCallback } from "react"
-import { EffectNode } from "./effect"
-import { setObserver } from "./context"
-import { Scope, createScope, ERROR } from "./scope"
-import { forkLane, type Priority, Lane } from "./lane"
-import type { Node } from "./node"
+import { ComputedNode } from "./computed";
+import { PulseNode } from "./pulse";
+import * as React from "react";
+import { useRef, useState, useEffect, useMemo, useCallback } from "react";
+import { EffectNode } from "./effect";
+import { setObserver } from "./context";
+import { Scope, createScope, ERROR } from "./scope";
+import { forkLane, type Priority, Lane } from "./lane";
+import type { Node } from "./node";
 
-
-// ###############
+// ##############################
 // usePulse
-// ###############
+// ##############################
 
 /**
  * usePulse
@@ -51,27 +50,23 @@ import type { Node } from "./node"
  * @returns      The pulse's current value.
  */
 export function usePulse<T>(pulse: PulseNode<T>): T {
-
-  const [, forceUpdate] = useState(0)
+  const [, forceUpdate] = useState(0);
 
   useEffect(() => {
-
     const effect = new EffectNode(() => {
-      pulse.get()
-      forceUpdate(v => v + 1)
-    })
+      pulse.get();
+      forceUpdate((v) => v + 1);
+    });
 
-    return () => effect.dispose()
+    return () => effect.dispose();
+  }, [pulse]);
 
-  }, [pulse])
-
-  return pulse.get()
+  return pulse.get();
 }
 
-
-// ###############
+// ##############################
 // useComputed
-// ###############
+// ##############################
 
 /**
  * useComputed
@@ -110,29 +105,25 @@ export function usePulse<T>(pulse: PulseNode<T>): T {
  * @returns    The current computed value.
  */
 export function useComputed<T>(fn: () => T): T {
+  const node = useMemo(() => new ComputedNode(fn), []);
 
-  const node = useMemo(() => new ComputedNode(fn), [])
-
-  const [, forceUpdate] = useState(0)
+  const [, forceUpdate] = useState(0);
 
   useEffect(() => {
-
     const effect = new EffectNode(() => {
-      node.get()
-      forceUpdate(v => v + 1)
-    })
+      node.get();
+      forceUpdate((v) => v + 1);
+    });
 
-    return () => effect.dispose()
+    return () => effect.dispose();
+  }, [node]);
 
-  }, [node])
-
-  return node.get()
+  return node.get();
 }
 
-
-// ###############
+// ##############################
 // useObserver
-// ###############
+// ##############################
 
 /**
  * useObserver
@@ -175,47 +166,45 @@ export function useComputed<T>(fn: () => T): T {
  * @returns        The React element produced by the render function.
  */
 export function useObserver(
-  render: () => React.ReactElement | null
+  render: () => React.ReactElement | null,
 ): React.ReactElement | null {
+  const [, forceUpdate] = useState(0);
 
-  const [, forceUpdate] = useState(0)
-
-  const effectRef = useRef<EffectNode | null>(null)
+  const effectRef = useRef<EffectNode | null>(null);
 
   if (!effectRef.current) {
     effectRef.current = new EffectNode(() => {
-      forceUpdate(v => v + 1)
-    })
+      forceUpdate((v) => v + 1);
+    });
   }
 
   useEffect(() => {
     return () => {
       if (effectRef.current) {
-        effectRef.current.dispose()
-        effectRef.current = null
+        effectRef.current.dispose();
+        effectRef.current = null;
       }
-    }
-  }, [])
+    };
+  }, []);
 
-  const effect = effectRef.current as Node
+  const effect = effectRef.current as Node;
 
-  setObserver(effect)
+  setObserver(effect);
 
-  let result: React.ReactElement | null = null
+  let result: React.ReactElement | null = null;
 
   try {
-    result = render()
+    result = render();
   } finally {
-    setObserver(null as any)
+    setObserver(null as any);
   }
 
-  return result
+  return result;
 }
 
-
-// ###############
+// ##############################
 // useEffectpulse
-// ###############
+// ##############################
 
 /**
  * useEffectpulse
@@ -257,27 +246,22 @@ export function useObserver(
  * @param fn - The side-effect function. May read any number of pulses.
  */
 export function useEffectpulse(fn: () => void) {
-
   useEffect(() => {
-
     // Create the reactive effect. The EffectNode constructor calls fn()
     // immediately to establish the initial set of pulse dependencies.
-    const effect = new EffectNode(fn)
+    const effect = new EffectNode(fn);
 
     // Cleanup: when the component unmounts, remove this effect from all
     // upstream pulse observer lists. Without this, the pulses would
     // continue calling fn() after the component is gone, causing stale
     // side effects and preventing garbage collection of the component.
-    return () => effect.dispose()
-
-  }, []) // empty array: the EffectNode is created once and manages its own lifecycle
-
+    return () => effect.dispose();
+  }, []); // empty array: the EffectNode is created once and manages its own lifecycle
 }
 
-
-// ###############
+// ##############################
 // useScope
-// ###############
+// ##############################
 
 /**
  * useScope
@@ -318,28 +302,27 @@ export function useEffectpulse(fn: () => void) {
  * @returns A Scope instance tied to the component's lifecycle.
  */
 export function useScope(): Scope {
-  const scopeRef = useRef<Scope | null>(null)
+  const scopeRef = useRef<Scope | null>(null);
 
   if (!scopeRef.current) {
-    scopeRef.current = createScope()
+    scopeRef.current = createScope();
   }
 
   useEffect(() => {
     return () => {
       if (scopeRef.current) {
-        scopeRef.current.dispose()
-        scopeRef.current = null
+        scopeRef.current.dispose();
+        scopeRef.current = null;
       }
-    }
-  }, [])
+    };
+  }, []);
 
-  return scopeRef.current!
+  return scopeRef.current!;
 }
 
-
-// ###############
+// ##############################
 // useTransition (Quanta)
-// ###############
+// ##############################
 
 /**
  * useQuantaTransition
@@ -381,49 +364,48 @@ export function useScope(): Scope {
  * @returns [isPending: boolean, startTransition: (fn: () => void) => void]
  */
 export function useQuantaTransition(): [boolean, (fn: () => void) => void] {
-  const [isPending, setIsPending] = useState(false)
-  const laneRef = useRef<Lane | null>(null)
+  const [isPending, setIsPending] = useState(false);
+  const laneRef = useRef<Lane | null>(null);
 
   const startTransition = useCallback((fn: () => void) => {
     // Abort any existing transition.
-    if (laneRef.current && laneRef.current.status === 'active') {
-      laneRef.current.abort()
+    if (laneRef.current && laneRef.current.status === "active") {
+      laneRef.current.abort();
     }
 
-    setIsPending(true)
+    setIsPending(true);
 
-    const lane = forkLane('transition')
-    laneRef.current = lane
+    const lane = forkLane("transition");
+    laneRef.current = lane;
 
     // Run the pulse writes in the lane context.
-    lane.run(fn)
+    lane.run(fn);
 
     // Commit on the next microtask to allow React to render the pending state.
     Promise.resolve().then(() => {
-      if (laneRef.current === lane && lane.status === 'active') {
-        lane.commit()
-        setIsPending(false)
-        laneRef.current = null
+      if (laneRef.current === lane && lane.status === "active") {
+        lane.commit();
+        setIsPending(false);
+        laneRef.current = null;
       }
-    })
-  }, [])
+    });
+  }, []);
 
   // Clean up on unmount.
   useEffect(() => {
     return () => {
-      if (laneRef.current && laneRef.current.status === 'active') {
-        laneRef.current.abort()
+      if (laneRef.current && laneRef.current.status === "active") {
+        laneRef.current.abort();
       }
-    }
-  }, [])
+    };
+  }, []);
 
-  return [isPending, startTransition]
+  return [isPending, startTransition];
 }
 
-
-// ###############
+// ##############################
 // useLane
-// ###############
+// ##############################
 
 /**
  * useLane
@@ -455,20 +437,20 @@ export function useQuantaTransition(): [boolean, (fn: () => void) => void] {
  * @param priority - The lane's scheduling priority.
  * @returns A Lane instance tied to the component's lifecycle.
  */
-export function useLane(priority: Priority = 'transition'): Lane {
-  const laneRef = useRef<Lane | null>(null)
+export function useLane(priority: Priority = "transition"): Lane {
+  const laneRef = useRef<Lane | null>(null);
 
   if (!laneRef.current) {
-    laneRef.current = forkLane(priority)
+    laneRef.current = forkLane(priority);
   }
 
   useEffect(() => {
     return () => {
-      if (laneRef.current && laneRef.current.status === 'active') {
-        laneRef.current.abort()
+      if (laneRef.current && laneRef.current.status === "active") {
+        laneRef.current.abort();
       }
-    }
-  }, [])
+    };
+  }, []);
 
-  return laneRef.current!
+  return laneRef.current!;
 }

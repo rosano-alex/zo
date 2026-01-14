@@ -4,10 +4,9 @@ import { ComputedNode } from "./computed";
 import { EffectNode } from "./effect";
 import type { Node } from "./node";
 
-
-// ##################
+// #################################
 // Message protocol
-// ##################
+// #################################
 
 /**
  * BridgeMessage
@@ -43,19 +42,24 @@ import type { Node } from "./node";
  *   ping/pong — Keepalive / latency measurement.
  */
 export type BridgeMessage =
-  | { type: 'expose'; id: string; value: any; kind: 'signal' | 'computed'; version: number }
-  | { type: 'update'; id: string; value: any; version: number }
-  | { type: 'set'; id: string; value: any }
-  | { type: 'subscribe'; id: string }
-  | { type: 'unsubscribe'; id: string }
-  | { type: 'dispose'; id: string }
-  | { type: 'ping'; timestamp: number }
-  | { type: 'pong'; timestamp: number };
+  | {
+      type: "expose";
+      id: string;
+      value: any;
+      kind: "signal" | "computed";
+      version: number;
+    }
+  | { type: "update"; id: string; value: any; version: number }
+  | { type: "set"; id: string; value: any }
+  | { type: "subscribe"; id: string }
+  | { type: "unsubscribe"; id: string }
+  | { type: "dispose"; id: string }
+  | { type: "ping"; timestamp: number }
+  | { type: "pong"; timestamp: number };
 
-
-// ##################
+// #################################
 // RemoteSignal
-// ##################
+// #################################
 
 /**
  * RemoteSignal
@@ -77,7 +81,6 @@ export type BridgeMessage =
  * signal; the cross-runtime synchronization is transparent.
  */
 export class RemotePulse<T> extends PulseNode<T> {
-
   /** The bridge that owns this proxy. */
   private bridge: GraphBridge;
 
@@ -87,13 +90,11 @@ export class RemotePulse<T> extends PulseNode<T> {
   /** Whether this proxy is still connected to the remote. */
   connected = true;
 
-
   constructor(bridge: GraphBridge, id: string, initialValue: T) {
     super(initialValue);
     this.bridge = bridge;
     this.remoteId = id;
   }
-
 
   /**
    * Overrides SignalNode.set() to send the write to the remote side.
@@ -113,12 +114,11 @@ export class RemotePulse<T> extends PulseNode<T> {
     }
 
     this.bridge.send({
-      type: 'set',
+      type: "set",
       id: this.remoteId,
       value: next,
     });
   }
-
 
   /**
    * setOptimistic()
@@ -137,13 +137,12 @@ export class RemotePulse<T> extends PulseNode<T> {
     // Also send to remote.
     if (this.connected) {
       this.bridge.send({
-        type: 'set',
+        type: "set",
         id: this.remoteId,
         value: next,
       });
     }
   }
-
 
   /**
    * Called by the bridge when an 'update' message arrives.
@@ -156,7 +155,6 @@ export class RemotePulse<T> extends PulseNode<T> {
     super.set(value);
   }
 
-
   /**
    * Called by the bridge when a 'dispose' message arrives.
    */
@@ -166,10 +164,9 @@ export class RemotePulse<T> extends PulseNode<T> {
   }
 }
 
-
-// ##################
+// #################################
 // RemoteComputed
-// ##################
+// #################################
 
 /**
  * RemoteComputed
@@ -190,7 +187,6 @@ export class RemotePulse<T> extends PulseNode<T> {
  * across the bridge.
  */
 export class RemoteComputed<T> {
-
   /** The bridge that owns this proxy. */
   private bridge: GraphBridge;
 
@@ -209,13 +205,11 @@ export class RemoteComputed<T> {
   /** Whether this proxy is still connected to the remote. */
   connected = true;
 
-
   constructor(bridge: GraphBridge, id: string, initialValue: T) {
     this.bridge = bridge;
     this.remoteId = id;
     this.signal = new PulseNode(initialValue);
   }
-
 
   /**
    * get()
@@ -230,14 +224,12 @@ export class RemoteComputed<T> {
     return this.signal.get();
   }
 
-
   /**
    * Called by the bridge when an 'update' message arrives.
    */
   _receiveUpdate(value: T) {
     this.signal.set(value);
   }
-
 
   /**
    * Called by the bridge when a 'dispose' message arrives.
@@ -248,10 +240,9 @@ export class RemoteComputed<T> {
   }
 }
 
-
-// ##################
+// #################################
 // GraphBridge
-// ##################
+// #################################
 
 /**
  * GraphBridge
@@ -301,7 +292,6 @@ export class RemoteComputed<T> {
  *   - Graceful disconnection and cleanup
  */
 export class GraphBridge {
-
   /**
    * The underlying communication channel.
    *
@@ -317,16 +307,20 @@ export class GraphBridge {
    * The bridge watches these nodes for changes and sends 'update'
    * messages automatically.
    */
-  private exposed: Map<string, {
-    node: PulseNode<any> | ComputedNode<any>;
-    effect: EffectNode | null;
-    version: number;
-  }> = new Map();
+  private exposed: Map<
+    string,
+    {
+      node: PulseNode<any> | ComputedNode<any>;
+      effect: EffectNode | null;
+      version: number;
+    }
+  > = new Map();
 
   /**
    * Proxy nodes created on this side that mirror remote nodes.
    */
-  private proxies: Map<string, RemotePulse<any> | RemoteComputed<any>> = new Map();
+  private proxies: Map<string, RemotePulse<any> | RemoteComputed<any>> =
+    new Map();
 
   /**
    * Whether the bridge is still active.
@@ -337,11 +331,13 @@ export class GraphBridge {
    * Pending subscriptions requested before the remote has exposed
    * the node. Resolved when an 'expose' message arrives.
    */
-  private pendingSubscriptions: Map<string, {
-    resolve: (proxy: RemotePulse<any> | RemoteComputed<any>) => void;
-    kind: 'signal' | 'computed';
-  }[]> = new Map();
-
+  private pendingSubscriptions: Map<
+    string,
+    {
+      resolve: (proxy: RemotePulse<any> | RemoteComputed<any>) => void;
+      kind: "signal" | "computed";
+    }[]
+  > = new Map();
 
   constructor(port: MessagePort) {
     this.port = port;
@@ -349,7 +345,6 @@ export class GraphBridge {
       this.onMessage(event.data as BridgeMessage);
     };
   }
-
 
   /**
    * expose()
@@ -368,7 +363,7 @@ export class GraphBridge {
    */
   expose(id: string, node: PulseNode<any> | ComputedNode<any>): void {
     if (!this.active) {
-      throw new Error('Cannot expose on a disposed bridge');
+      throw new Error("Cannot expose on a disposed bridge");
     }
 
     if (this.exposed.has(id)) {
@@ -376,7 +371,7 @@ export class GraphBridge {
     }
 
     const isSignal = node instanceof PulseNode;
-    const kind: 'signal' | 'computed' = isSignal ? 'signal' : 'computed';
+    const kind: "signal" | "computed" = isSignal ? "signal" : "computed";
 
     // Get the current value.
     const value = isSignal ? node.value : (node as ComputedNode<any>).get();
@@ -384,7 +379,7 @@ export class GraphBridge {
 
     // Send the initial expose message.
     this.send({
-      type: 'expose',
+      type: "expose",
       id,
       value,
       kind,
@@ -397,11 +392,13 @@ export class GraphBridge {
         ? (node as PulseNode<any>).get()
         : (node as ComputedNode<any>).get();
 
-      const currentVersion = isSignal ? (node as PulseNode<any>).version : ++version;
+      const currentVersion = isSignal
+        ? (node as PulseNode<any>).version
+        : ++version;
 
       // Send update to remote.
       this.send({
-        type: 'update',
+        type: "update",
         id,
         value: currentValue,
         version: currentVersion,
@@ -410,7 +407,6 @@ export class GraphBridge {
 
     this.exposed.set(id, { node, effect, version });
   }
-
 
   /**
    * proxySignal()
@@ -436,11 +432,10 @@ export class GraphBridge {
     this.proxies.set(id, proxy);
 
     // Ask the remote to start sending updates.
-    this.send({ type: 'subscribe', id });
+    this.send({ type: "subscribe", id });
 
     return proxy;
   }
-
 
   /**
    * proxyComputed()
@@ -465,11 +460,10 @@ export class GraphBridge {
     this.proxies.set(id, proxy);
 
     // Ask the remote to start sending updates.
-    this.send({ type: 'subscribe', id });
+    this.send({ type: "subscribe", id });
 
     return proxy;
   }
-
 
   /**
    * awaitProxy()
@@ -482,17 +476,11 @@ export class GraphBridge {
    * @param kind - Whether to expect a signal or computed.
    * @returns A promise that resolves with the proxy.
    */
+  awaitProxy<T>(id: string, kind: "signal"): Promise<RemotePulse<T>>;
+  awaitProxy<T>(id: string, kind: "computed"): Promise<RemoteComputed<T>>;
   awaitProxy<T>(
     id: string,
-    kind: 'signal'
-  ): Promise<RemotePulse<T>>;
-  awaitProxy<T>(
-    id: string,
-    kind: 'computed'
-  ): Promise<RemoteComputed<T>>;
-  awaitProxy<T>(
-    id: string,
-    kind: 'signal' | 'computed'
+    kind: "signal" | "computed",
   ): Promise<RemotePulse<T> | RemoteComputed<T>> {
     // If already proxied, resolve immediately.
     if (this.proxies.has(id)) {
@@ -506,10 +494,9 @@ export class GraphBridge {
       this.pendingSubscriptions.get(id)!.push({ resolve, kind });
 
       // Send subscribe message so the remote knows we want this node.
-      this.send({ type: 'subscribe', id });
+      this.send({ type: "subscribe", id });
     });
   }
-
 
   /**
    * send()
@@ -530,7 +517,6 @@ export class GraphBridge {
     }
   }
 
-
   /**
    * dispose()
    *
@@ -550,7 +536,7 @@ export class GraphBridge {
       if (entry.effect) {
         entry.effect.dispose();
       }
-      this.send({ type: 'dispose', id });
+      this.send({ type: "dispose", id });
     }
     this.exposed.clear();
 
@@ -571,7 +557,6 @@ export class GraphBridge {
     }
   }
 
-
   /**
    * ping()
    *
@@ -588,17 +573,16 @@ export class GraphBridge {
     return new Promise((resolve) => {
       const onMessage = (event: MessageEvent) => {
         const msg = event.data as BridgeMessage;
-        if (msg.type === 'pong' && msg.timestamp === start) {
-          this.port.removeEventListener('message', onMessage);
+        if (msg.type === "pong" && msg.timestamp === start) {
+          this.port.removeEventListener("message", onMessage);
           resolve(performance.now() - start);
         }
       };
 
-      this.port.addEventListener('message', onMessage);
-      this.send({ type: 'ping', timestamp: start });
+      this.port.addEventListener("message", onMessage);
+      this.send({ type: "ping", timestamp: start });
     });
   }
-
 
   //Handle Messages
 
@@ -609,14 +593,13 @@ export class GraphBridge {
     if (!this.active) return;
 
     switch (msg.type) {
-
-      case 'expose': {
+      case "expose": {
         // Remote is exposing a node. Create or update local proxy.
         let proxy = this.proxies.get(msg.id);
 
         if (!proxy) {
           // Create proxy based on kind.
-          if (msg.kind === 'signal') {
+          if (msg.kind === "signal") {
             proxy = new RemotePulse(this, msg.id, msg.value);
           } else {
             proxy = new RemoteComputed(this, msg.id, msg.value);
@@ -639,7 +622,7 @@ export class GraphBridge {
         break;
       }
 
-      case 'update': {
+      case "update": {
         // Remote node value changed. Update local proxy.
         const proxy = this.proxies.get(msg.id);
         if (proxy) {
@@ -648,7 +631,7 @@ export class GraphBridge {
         break;
       }
 
-      case 'set': {
+      case "set": {
         // Remote is requesting a write to one of our exposed signals.
         const entry = this.exposed.get(msg.id);
         if (entry && entry.node instanceof PulseNode) {
@@ -657,7 +640,7 @@ export class GraphBridge {
         break;
       }
 
-      case 'subscribe': {
+      case "subscribe": {
         // Remote wants updates for one of our exposed nodes.
         const entry = this.exposed.get(msg.id);
         if (entry) {
@@ -667,23 +650,23 @@ export class GraphBridge {
             : (entry.node as ComputedNode<any>).get();
 
           this.send({
-            type: 'expose',
+            type: "expose",
             id: msg.id,
             value,
-            kind: isSignal ? 'signal' : 'computed',
+            kind: isSignal ? "signal" : "computed",
             version: entry.version,
           });
         }
         break;
       }
 
-      case 'unsubscribe': {
+      case "unsubscribe": {
         // Remote no longer needs updates. We keep the expose but could
         // optimize by pausing the watch effect.
         break;
       }
 
-      case 'dispose': {
+      case "dispose": {
         // Remote node has been disposed. Clean up local proxy.
         const proxy = this.proxies.get(msg.id);
         if (proxy) {
@@ -693,12 +676,12 @@ export class GraphBridge {
         break;
       }
 
-      case 'ping': {
-        this.send({ type: 'pong', timestamp: msg.timestamp });
+      case "ping": {
+        this.send({ type: "pong", timestamp: msg.timestamp });
         break;
       }
 
-      case 'pong': {
+      case "pong": {
         // Handled by ping() promise listener.
         break;
       }
@@ -706,10 +689,9 @@ export class GraphBridge {
   }
 }
 
-
-// ##################
+// #################################
 // Worker helpers
-// ##################
+// #################################
 
 /**
  * createWorkerBridge()
@@ -733,9 +715,7 @@ export class GraphBridge {
  *
  * @param setup - Function called with the bridge once the port is received.
  */
-export function createWorkerBridge(
-  setup: (bridge: GraphBridge) => void
-): void {
+export function createWorkerBridge(setup: (bridge: GraphBridge) => void): void {
   const ctx = globalThis as DedicatedWorkerGlobalScope;
 
   ctx.onmessage = (event: MessageEvent) => {

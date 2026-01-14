@@ -5,10 +5,9 @@ import type { ComputedNode } from "./computed";
 import { setObserver } from "./context";
 import { Scope, activeScope } from "./scope";
 
-
-// ##################
+// #################################
 // Lane types
-// ##################
+// #################################
 
 /**
  * Priority levels for concurrent lanes.
@@ -27,7 +26,7 @@ import { Scope, activeScope } from "./scope";
  *                content, analytics). Only runs when no sync or transition
  *                work is pending. Maps to requestIdleCallback semantics.
  */
-export type Priority = 'sync' | 'transition' | 'idle';
+export type Priority = "sync" | "transition" | "idle";
 
 const PRIORITY_ORDER: Record<Priority, number> = {
   sync: 0,
@@ -37,10 +36,9 @@ const PRIORITY_ORDER: Record<Priority, number> = {
 
 let nextLaneId = 1;
 
-
-// ##################
+// #################################
 // Lane
-// ##################
+// #################################
 
 /**
  * Lane
@@ -83,7 +81,6 @@ let nextLaneId = 1;
  *   update.
  */
 export class Lane {
-
   /**
    * Unique identifier for this lane.
    *
@@ -154,7 +151,7 @@ export class Lane {
    *   committed — overrides have been applied to base; lane is done
    *   aborted   — overrides discarded; lane is done
    */
-  status: 'active' | 'committed' | 'aborted' = 'active';
+  status: "active" | "committed" | "aborted" = "active";
 
   /**
    * Optional scope that owns this lane. When the scope is disposed,
@@ -173,7 +170,6 @@ export class Lane {
    */
   parent: Lane | null;
 
-
   constructor(priority: Priority, parent: Lane | null = null) {
     this.id = nextLaneId++;
     this.priority = priority;
@@ -183,13 +179,12 @@ export class Lane {
     // If created within a scope, register for automatic cleanup.
     if (this.scope) {
       this.scope.onCleanup(() => {
-        if (this.status === 'active') {
+        if (this.status === "active") {
           this.abort();
         }
       });
     }
   }
-
 
   /**
    * run()
@@ -205,7 +200,7 @@ export class Lane {
    * @throws If the lane has been committed or aborted.
    */
   run<T>(fn: () => T): T {
-    if (this.status !== 'active') {
+    if (this.status !== "active") {
       throw new Error(`Cannot run in a ${this.status} lane`);
     }
 
@@ -217,7 +212,6 @@ export class Lane {
       setActiveLane(null);
     }
   }
-
 
   /**
    * read()
@@ -244,7 +238,6 @@ export class Lane {
     return pulse.value;
   }
 
-
   /**
    * write()
    *
@@ -269,7 +262,6 @@ export class Lane {
     // Invalidate downstream computeds within this lane.
     this.invalidateDownstream(pulse);
   }
-
 
   /**
    * readComputed()
@@ -298,7 +290,6 @@ export class Lane {
     return value;
   }
 
-
   /**
    * commit()
    *
@@ -314,11 +305,11 @@ export class Lane {
    * @throws If the lane is not active.
    */
   commit(): void {
-    if (this.status !== 'active') {
+    if (this.status !== "active") {
       throw new Error(`Cannot commit a ${this.status} lane`);
     }
 
-    this.status = 'committed';
+    this.status = "committed";
 
     // Apply overrides to base pulses. Each set() call triggers
     // normal propagation (markDirty → schedule → flush).
@@ -328,7 +319,6 @@ export class Lane {
 
     this.cleanup();
   }
-
 
   /**
    * abort()
@@ -342,12 +332,11 @@ export class Lane {
    * @throws If the lane is not active.
    */
   abort(): void {
-    if (this.status !== 'active') return; // idempotent for cleanup
+    if (this.status !== "active") return; // idempotent for cleanup
 
-    this.status = 'aborted';
+    this.status = "aborted";
     this.cleanup();
   }
-
 
   /**
    * fork()
@@ -363,12 +352,11 @@ export class Lane {
    * @returns A new child Lane.
    */
   fork(priority?: Priority): Lane {
-    if (this.status !== 'active') {
+    if (this.status !== "active") {
       throw new Error(`Cannot fork a ${this.status} lane`);
     }
     return new Lane(priority ?? this.priority, this);
   }
-
 
   // ── Private ──────────────────────────────────────────────────────
 
@@ -411,12 +399,12 @@ export class Lane {
         visited.add(obs);
 
         // If it's a ComputedNode (has a compute method), mark dirty in this lane
-        if ('compute' in obs) {
+        if ("compute" in obs) {
           this.dirtyComputeds.add(obs as unknown as ComputedNode<any>);
         }
 
         // If it's an EffectNode (has a dispose method but no compute), queue it
-        if ('dispose' in obs && !('compute' in obs)) {
+        if ("dispose" in obs && !("compute" in obs)) {
           this.pendingEffects.push(obs);
         }
 
@@ -441,10 +429,9 @@ export class Lane {
   }
 }
 
-
-// ##################
+// #################################
 // Active lane tracking
-// ##################
+// #################################
 
 /**
  * The lane stack allows nested lane.run() calls (e.g., a lane forking
@@ -470,10 +457,9 @@ function setActiveLane(lane: Lane | null) {
   }
 }
 
-
-// ##################
+// #################################
 // Convenience API
-// ##################
+// #################################
 
 /**
  * forkLane()
@@ -486,7 +472,7 @@ function setActiveLane(lane: Lane | null) {
  * @param priority - The lane's scheduling priority. Defaults to 'transition'.
  * @returns A new Lane.
  */
-export function forkLane(priority: Priority = 'transition'): Lane {
+export function forkLane(priority: Priority = "transition"): Lane {
   return new Lane(priority, activeLane);
 }
 
@@ -507,7 +493,7 @@ export function forkLane(priority: Priority = 'transition'): Lane {
  * @param fn - The function containing pulse writes to buffer.
  */
 export function transition(fn: () => void): void {
-  const lane = forkLane('transition');
+  const lane = forkLane("transition");
   lane.run(fn);
   lane.commit();
 }
@@ -538,7 +524,7 @@ export function transition(fn: () => void): void {
  */
 export function speculate(
   fn: () => void,
-  priority: Priority = 'transition'
+  priority: Priority = "transition",
 ): Lane {
   const lane = forkLane(priority);
   lane.run(fn);

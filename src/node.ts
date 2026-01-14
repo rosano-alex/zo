@@ -7,9 +7,9 @@ export const enum NodeFlags {
 }
 
 export interface Node {
-  lane: number
-  flags: NodeFlags
-  observers?: Node[]
-  mark(): void
-  run(): void
+  lane: number;
+  flags: NodeFlags;
+  observers?: Node[];
+  mark(): void;
+  run(): void;
 }

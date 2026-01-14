@@ -1,7 +1,6 @@
-
 <p style="text-align: Left;"><img src="img/quanta_logo.png" width="550"></p>
 
-**Quanta** is a minimal, high‑performance fine‑grained reactive runtime built around signals, computed values, and deterministic scheduling.  It is designed as a framework‑agnostic reactive engine that can power UI frameworks, state managers, and reactive data pipelines.
+**Quanta** is a minimal, high‑performance fine‑grained reactive runtime built around signals, computed values, and deterministic scheduling. It is designed as a framework‑agnostic reactive engine that can power UI frameworks, state managers, and reactive data pipelines.
 
 ### Quanta combines ideas from:
 
@@ -13,10 +12,13 @@
 Quanta implements them in a small deterministic runtime with priority lanes.
 
 ### Quanta Principals
+
 - **Simplicity** - The runtime is intentionally small and understandable.
 - **Determinism** - Reactive updates always occur in a predictable order.
 - **Performance** - Fine‑grained dependency tracking ensures minimal work.
 - **Composability** - Signals, computed values, and effects can be combined freely.
+
+---
 
 ---
 
@@ -28,7 +30,7 @@ Quanta implements them in a small deterministic runtime with priority lanes.
 • Reactive effects  
 • Deterministic scheduler with priority lanes  
 • Very small runtime footprint  
-• Framework‑agnostic design  
+• Framework‑agnostic design
 
 ---
 
@@ -36,30 +38,28 @@ Quanta implements them in a small deterministic runtime with priority lanes.
 
 ```bash
 npm install quanta
-# or 
+# or
 yarn add quanta
 ```
-```
 
----
-
-# Quick Example
+### Quick Example
 
 ```ts
-import { signal, computed, effect } from "quanta"
-const count = pulse(0)
-const doubled = computed(() => count.get() * 2)
+import { signal, computed, effect } from "quanta";
+const count = pulse(0);
+const doubled = computed(() => count.get() * 2);
 
 effect(() => {
-  console.log("count:", count.get())
-  console.log("double:", doubled.get())
-})
-count.set(1)
+  console.log("count:", count.get());
+  console.log("double:", doubled.get());
+});
+count.set(1);
 
 // Output:
-count: 1
-double: 2
+count: 1;
+double: 2;
 ```
+
 ---
 
 # Core Concepts
@@ -83,14 +83,14 @@ Reading a signal automatically tracks dependencies.
 Computed values derive state from signals.
 
 ```ts
-const total = computed(() => price.get() * qty.get())
+const total = computed(() => price.get() * qty.get());
 ```
 
 Properties:
 
 • lazy evaluation  
 • automatic dependency tracking  
-• cached until dependencies change  
+• cached until dependencies change
 
 ---
 
@@ -100,8 +100,8 @@ Effects execute side effects when dependencies change.
 
 ```ts
 effect(() => {
-  console.log(count.get())
-})
+  console.log(count.get());
+});
 ```
 
 ---
@@ -149,18 +149,18 @@ Quanta's runtime is composed of a small set of primitives.
 
 Three node types form the dependency graph:
 
-| Node Type | Purpose |
-|-----------|--------|
-| SignalNode | mutable state |
+| Node Type    | Purpose        |
+| ------------ | -------------- |
+| PulselNode   | mutable state  |
 | ComputedNode | derived values |
-| EffectNode | side effects |
+| EffectNode   | side effects   |
 
 Dependency tracking occurs automatically during execution.
 
 Example:
 
 ```
-SignalNode → ComputedNode → EffectNode
+PulseNode → ComputedNode → EffectNode
 ```
 
 ---
@@ -214,16 +214,6 @@ This guarantees stable execution and enables advanced scheduling strategies.
 
 # Reactive Graph Example
 
-```
-      count
-        │
-        ▼
-     doubled
-        │
-        ▼
-     logger
-```
-
 When `count` changes:
 
 ```
@@ -245,25 +235,25 @@ Only the affected nodes update.
 ## Derived State Graph
 
 ```ts
-const price = pulse(10)
-const qty = pulse(2)
+const price = pulse(10);
+const qty = pulse(2);
 
-const subtotal = computed(() => price.get() * qty.get())
-const tax = computed(() => subtotal.get() * 0.07)
-const total = computed(() => subtotal.get() + tax.get())
+const subtotal = computed(() => price.get() * qty.get());
+const tax = computed(() => subtotal.get() * 0.07);
+const total = computed(() => subtotal.get() + tax.get());
 
 effect(() => {
-  console.log("total =", total.get())
-})
-``````
+  console.log("total =", total.get());
+});
+```
 
 ---
 
 ## Multiple Effects
 
 ```ts
-effect(() => console.log("count:", count.get()))
-effect(() => console.log("double:", doubled.get()))
+effect(() => console.log("count:", count.get()));
+effect(() => console.log("double:", doubled.get()));
 ```
 
 Each effect independently subscribes to dependencies.
@@ -275,14 +265,15 @@ Each effect independently subscribes to dependencies.
 Quanta can also power data flows.
 
 ```ts
-const raw = pulse(10)
+const raw = pulse(10);
 
-const normalized = computed(() => raw.get() / 100)
-const percent = computed(() => normalized.get() * 100)
+const normalized = computed(() => raw.get() / 100);
+const percent = computed(() => normalized.get() * 100);
 effect(() => {
-  console.log(percent.get() + "%")
-})
+  console.log(percent.get() + "%");
+});
 ```
+
 ---
 
 # What Makes Quanta Different
@@ -293,8 +284,7 @@ Quanta achieves competitive performance because it uses:
 • array based observer lists  
 • lazy computed evaluation  
 • minimal runtime allocations  
-• deterministic scheduler  
-
+• deterministic scheduler
 
 Quanta integrates:
 
@@ -311,11 +301,9 @@ Potential use cases:
 • UI frameworks  
 • concurrent rendering engines  
 • real‑time dashboards  
-• reactive simulation systems  
+• reactive simulation systems
 
 ---
-
-
 
 ---
 
@@ -330,4 +318,3 @@ The architecture is stable but internal optimizations will continue to evolve.
 # License
 
 MIT
-

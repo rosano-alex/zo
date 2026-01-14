@@ -1,39 +1,37 @@
-import type { Node } from "./node"
-import { LaneTypes } from "./lanetypes"
+import type { Node } from "./node";
+import { LaneTypes } from "./lanetypes";
 
 // deterministic scheduler phases
 const phaseQueue: Record<number, Node[]> = {
   [LaneTypes.SYNC]: [],
   [LaneTypes.USER]: [],
   [LaneTypes.TRANSITION]: [],
-  [LaneTypes.BACKGROUND]: []
-}
+  [LaneTypes.BACKGROUND]: [],
+};
 
-let flushing = false
+let flushing = false;
 
 export function schedule(node: Node) {
-
-  const lane = node.lane
+  const lane = node.lane;
   if (phaseQueue[lane] != null) {
-    phaseQueue[lane].push(node)
+    phaseQueue[lane].push(node);
   }
 
   if (!flushing) {
-    flushing = true
-    queueMicrotask(flush)
+    flushing = true;
+    queueMicrotask(flush);
   }
 }
 
 function runQueue(queue: Node[]) {
-
   for (let i = 0; i < queue.length; i++) {
-    const node = queue[i]
+    const node = queue[i];
     if (node) {
-      node.run()
+      node.run();
     }
   }
 
-  queue.length = 0
+  queue.length = 0;
 }
 
 function hasWork(): boolean {
@@ -42,24 +40,23 @@ function hasWork(): boolean {
     phaseQueue[LaneTypes.USER].length > 0 ||
     phaseQueue[LaneTypes.TRANSITION].length > 0 ||
     phaseQueue[LaneTypes.BACKGROUND].length > 0
-  )
+  );
 }
 
 function flush() {
-
   // Re-run phases until no new work is produced (effects may schedule more effects)
-  let iterations = 0
+  let iterations = 0;
   do {
-    runQueue(phaseQueue[LaneTypes.SYNC] as Node[])
-    runQueue(phaseQueue[LaneTypes.USER] as Node[])
-    runQueue(phaseQueue[LaneTypes.TRANSITION] as Node[])
-    runQueue(phaseQueue[LaneTypes.BACKGROUND] as Node[])
+    runQueue(phaseQueue[LaneTypes.SYNC] as Node[]);
+    runQueue(phaseQueue[LaneTypes.USER] as Node[]);
+    runQueue(phaseQueue[LaneTypes.TRANSITION] as Node[]);
+    runQueue(phaseQueue[LaneTypes.BACKGROUND] as Node[]);
 
     // Safety valve to prevent infinite loops from cyclic effects
     if (++iterations > 100) {
-      break
+      break;
     }
-  } while (hasWork())
+  } while (hasWork());
 
-  flushing = false
+  flushing = false;
 }
