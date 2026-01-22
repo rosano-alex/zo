@@ -1,24 +1,17 @@
 <p style="text-align: Left;"><img src="img/quanta_logo.png" width="550"></p>
 
+
+
 **Quanta** is a minimal, high‑performance fine‑grained reactive runtime built around signals, computed values, and deterministic scheduling. It is designed as a framework‑agnostic reactive engine that can power UI frameworks, state managers, and reactive data pipelines.
 
-### Quanta combines ideas from:
+Quanta combines ideas from Solid signals, MobX, Angular Signals, and React scheduler priorities. Quanta uses a small deterministic runtime with priority lanes.
 
-- Solid signals
-- MobX derivations
-- Angular Signals
-- React scheduler priorities
-
-Quanta implements them in a small deterministic runtime with priority lanes.
-
-### Quanta Principals
+### High Level Principals
 
 - **Simplicity** - The runtime is intentionally small and understandable.
 - **Determinism** - Reactive updates always occur in a predictable order.
 - **Performance** - Fine‑grained dependency tracking ensures minimal work.
 - **Composability** - Signals, computed values, and effects can be combined freely.
-
----
 
 ---
 
@@ -42,8 +35,12 @@ npm install quanta
 yarn add quanta
 ```
 
-### Quick Example
 
+---
+
+# Examples
+
+### Basic Idea
 ```ts
 import { signal, computed, effect } from "quanta";
 const count = pulse(0);
@@ -60,13 +57,9 @@ count: 1;
 double: 2;
 ```
 
----
+### Pulse
 
-# Core Concepts
-
-## Pulse
-
-**Pulse** represent reactive mutable state.
+**Pulse** represents s reactive mutable state. Reading a signal automatically tracks dependencies.
 
 ```ts
 const count = pulse](0)
@@ -74,17 +67,9 @@ count.get()
 count.set(1)
 ```
 
-Reading a signal automatically tracks dependencies.
-
----
-
-## Computed Values
+### Computed Values
 
 Computed values derive state from signals.
-
-```ts
-const total = computed(() => price.get() * qty.get());
-```
 
 Properties:
 
@@ -92,9 +77,12 @@ Properties:
 • automatic dependency tracking  
 • cached until dependencies change
 
----
+```ts
+const total = computed(() => price.get() * qty.get());
+```
 
-## Effects
+
+### Effects
 
 Effects execute side effects when dependencies change.
 
@@ -108,44 +96,15 @@ effect(() => {
 
 # Architecture Overview
 
-Quanta builds a **reactive dependency graph**.
+Quanta builds a **reactive dependency graph**. Only the necessary parts of the graph update.
 
-```
-        Signal
-          │
-          │
-      Computed
-          │
-          │
-        Effect
-          │
-          │
-      Scheduler
-```
+<p style="text-align: Left;"><img src="img/flow-1.png" width="150"></p>
 
-When a signal changes:
+### When Pulse changes
+<p style="text-align: Left;"><img src="img/flow-2.png" width="170"></p>
 
-```
-Signal.set()
-    ↓
-mark observers
-    ↓
-schedule effects
-    ↓
-scheduler flush
-    ↓
-effects execute
-```
-
-Only the **necessary parts of the graph update**.
-
----
-
-# Internal Runtime Architecture
-
+# Reactive Nodes (Internal Architecture)
 Quanta's runtime is composed of a small set of primitives.
-
-## Reactive Nodes
 
 Three node types form the dependency graph:
 
@@ -302,8 +261,6 @@ Potential use cases:
 • concurrent rendering engines  
 • real‑time dashboards  
 • reactive simulation systems
-
----
 
 ---
 
