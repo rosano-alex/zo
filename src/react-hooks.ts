@@ -16,7 +16,7 @@ import type { Node } from "./node";
  * usePulse
  * ---------
  *
- * Subscribes a React component to a Quanta pulseNode and returns its
+ * Subscribes a React component to an Ictus pulseNode and returns its
  * current value.
  *
  * Whenever the pulse's value changes, the component re-renders
@@ -211,9 +211,9 @@ export function useObserver(
  * ---------------
  *
  * Runs a reactive side-effect inside a React component that automatically
- * re-executes whenever its Quanta pulse dependencies change.
+ * re-executes whenever its Ictus pulse dependencies change.
  *
- * This is the Quanta equivalent of React's useEffect, but dependency
+ * This is the Ictus equivalent of React's useEffect, but dependency
  * tracking is automatic — you do not need to declare a dependency array.
  * Any pulses read inside `fn` are tracked and will trigger a re-run.
  *
@@ -241,7 +241,7 @@ export function useObserver(
  * Difference from useEffect:
  *
  *   useEffect   → you declare deps manually, React re-runs on dep changes
- *   useEffectpulse → deps are tracked automatically, Quanta re-runs on pulse changes
+ *   useEffectpulse → deps are tracked automatically, Ictus re-runs on pulse changes
  *
  * @param fn - The side-effect function. May read any number of pulses.
  */
@@ -321,14 +321,14 @@ export function useScope(): Scope {
 }
 
 // ##############################
-// useTransition (Quanta)
+// useTransition (Ictus)
 // ##############################
 
 /**
- * useQuantaTransition
+ * useIctusTransition
  * -------------------
  *
- * Quanta's equivalent of React's useTransition, implemented using
+ * Ictus's equivalent of React's useTransition, implemented using
  * concurrent lanes.
  *
  * Returns a [isPending, startTransition] tuple. pulse writes inside
@@ -342,7 +342,7 @@ export function useScope(): Scope {
  * Usage:
  *
  *   function SearchPage() {
- *     const [isPending, startTransition] = useQuantaTransition()
+ *     const [isPending, startTransition] = useIctusTransition()
  *
  *     return (
  *       <div>
@@ -363,7 +363,7 @@ export function useScope(): Scope {
  *
  * @returns [isPending: boolean, startTransition: (fn: () => void) => void]
  */
-export function useQuantaTransition(): [boolean, (fn: () => void) => void] {
+export function useIctusTransition(): [boolean, (fn: () => void) => void] {
   const [isPending, setIsPending] = useState(false);
   const laneRef = useRef<Lane | null>(null);
 

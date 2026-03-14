@@ -17,7 +17,7 @@ import type { PulseNode } from "./pulse";
  * an operation without knowing how it will be handled — the handler is
  * installed by an ancestor scope and intercepts the operation at runtime.
  *
- * In Quanta, effect keys are created with defineEffect() and carry
+ * In Ictus, effect keys are created with defineEffect() and carry
  * phantom type parameters so that perform() and handle() are type-safe:
  *
  *   const LOG = defineEffect<string, void>('log')

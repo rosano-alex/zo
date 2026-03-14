@@ -1,10 +1,10 @@
-<p style="text-align: Left;"><img src="img/quanta_logo.png" width="550"></p>
+<p style="text-align: Left;"><img src="img/ICTUS.png" width="550"></p>
 
 
 
-**Quanta** is a minimal, high‑performance fine‑grained reactive runtime built around signals, computed values, and deterministic scheduling. It is designed as a framework‑agnostic reactive engine that can power UI frameworks, state managers, and reactive data pipelines.
+**ICTUS** is a minimal, high‑performance fine‑grained reactive runtime built around signals, computed values, and deterministic scheduling. It is designed as a framework‑agnostic reactive engine that can power UI frameworks, state managers, and reactive data pipelines.
 
-Quanta combines ideas from Solid signals, MobX, Angular Signals, and React scheduler priorities. Quanta uses a small deterministic runtime with priority lanes.
+ICTUS combines ideas from Solid signals, MobX, Angular Signals, and React scheduler priorities. ICTUS uses a small deterministic runtime with priority lanes.
 
 ### High Level Principals
 
@@ -14,7 +14,7 @@ Quanta combines ideas from Solid signals, MobX, Angular Signals, and React sched
 - **Composability** - Signals, computed values, and effects can be combined freely.
 
 Most signal systems focus purely on **dependency tracking**.
-Quanta achieves competitive performance because it uses:
+ICTUS achieves competitive performance because it uses:
 
 • Array based observer lists  
 • Lazy computed evaluation  
@@ -39,24 +39,24 @@ Quanta achieves competitive performance because it uses:
 • Very small runtime footprint  
 • Framework‑agnostic design
 
----
+
 
 # Installation
 
 ```bash
-npm install quanta
+npm install ICTUS
 # or
-yarn add quanta
+yarn add ICTUS
 ```
 
 
----
+
 
 # Examples
 
 ### Basic Idea
 ```ts
-import { signal, computed, effect } from "quanta";
+import { signal, computed, effect } from "ICTUS";
 const count = pulse(0);
 const doubled = computed(() => count.get() * 2);
 
@@ -110,15 +110,14 @@ effect(() => {
 
 # Architecture Overview
 
-Quanta builds a **reactive dependency graph**. Only the necessary parts of the graph update.
+ICTUS builds a **reactive dependency graph**. Only the necessary parts of the graph update.
 
-<p style="text-align: Left;"><img src="img/flow-1.png" width="150"></p>
+<p style="text-align: Left;"><img src="img/flow.png" width="430"></p>
 
-### When Pulse changes
-<p style="text-align: Left;"><img src="img/flow-2.png" width="170"></p>
+<br>
 
 # Reactive Nodes (Internal Architecture)
-Quanta's runtime is composed of a small set of primitives.
+ICTUS's runtime is composed of a small set of primitives.
 
 Three node types form the dependency graph:
 
@@ -160,7 +159,7 @@ This forms the reactive graph dynamically.
 
 ## Scheduler
 
-Quanta uses a **deterministic scheduler with priority lanes**.
+ICTUS uses a **deterministic scheduler with priority lanes**.
 
 ```
 SYNC
@@ -235,7 +234,7 @@ Each effect independently subscribes to dependencies.
 
 ## Reactive Data Pipeline
 
-Quanta can also power data flows.
+ICTUS can also power data flows.
 
 ```ts
 const raw = pulse(10);
@@ -249,38 +248,10 @@ effect(() => {
 
 ---
 
-# What Makes Quanta Different
-
-Most signal systems focus purely on **dependency tracking**.
-Quanta achieves competitive performance because it uses:
-
-• array based observer lists  
-• lazy computed evaluation  
-• minimal runtime allocations  
-• deterministic scheduler
-
-Quanta integrates:
-
-```
-Fine‑grained signals
-        +
-Deterministic scheduler
-```
-
-This allows reactive work to be **prioritized and coordinated**.
-
-Potential use cases:
-
-• UI frameworks  
-• concurrent rendering engines  
-• real‑time dashboards  
-• reactive simulation systems
-
----
 
 # Project Status
 
-Quanta is currently **early stage**.
+ICTUS is currently **early stage**.
 
 The architecture is stable but internal optimizations will continue to evolve.
 

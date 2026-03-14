@@ -298,7 +298,7 @@ describe("convenience functions", () => {
     lane.abort(); // cleanup
   });
 
-  // transition() is the Quanta equivelant of React's startTransition().
+  // transition() is the Ictus equivelant of React's startTransition().
   // It creates a lane, runs the function inside it, and commits
   // immediately — making the wrties appear atomic.
   it("transition() runs and commits atomically", () => {

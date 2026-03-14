@@ -47,7 +47,7 @@ let nextLaneId = 1;
  * A concurrent execution context that maintains an isolated fork of
  * the reactive graph's pulse values.
  *
- * Lanes are the mechanism that makes Quanta compatible with React's
+ * Lanes are the mechanism that makes Ictus compatible with React's
  * concurrent rendering model. When React starts a transition, the
  * corresponding lane captures pulse writes without mutating the base
  * graph. Multiple lanes can be active simultaneously (one per React
@@ -482,7 +482,7 @@ export function forkLane(priority: Priority = "transition"): Lane {
  * Convenience for creating a transition-priority lane, running a
  * function in it, and committing the result.
  *
- * This is the Quanta equivalent of React's startTransition():
+ * This is the Ictus equivalent of React's startTransition():
  *
  *   transition(() => {
  *     count.set(5)        // buffered in lane
