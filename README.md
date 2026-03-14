@@ -1,5 +1,5 @@
 
-![Quanta](misc/logo.png)
+#Quanta 
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/built_with-TypeScript-blue)]()
@@ -24,17 +24,6 @@ The runtime is framework agnostic and includes optional React integration.
 
 # Architecture Overview
 
-Quanta models applications as a **reactive dependency graph**.
-
-```mermaid
-graph TD
-
-PulseNode --> ComputedNode
-ComputedNode --> ComputedNode
-ComputedNode --> EffectNode
-PulseNode --> EffectNode
-```
-
 **Propagation flow**
 
 1. A PulseNode changes
@@ -45,30 +34,6 @@ PulseNode --> EffectNode
 
 ---
 
-# Reactive Graph Visualization
-
-A simple example graph:
-
-```mermaid
-graph TD
-
-Count[Pulse: count]
-
-Double[Computed: count * 2]
-Triple[Computed: count * 3]
-
-UI[Effect: render UI]
-
-Count --> Double
-Count --> Triple
-
-Double --> UI
-Triple --> UI
-```
-
-When `count` updates, only the dependent nodes recompute.
-
----
 
 # Installation
 
