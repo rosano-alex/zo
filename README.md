@@ -1,4 +1,4 @@
-<p style="text-align: Left;"><img src="img/kilombo.png" width="350"></p>
+<p style="text-align: Left;"><img src="img/kilombo.png" width="370"></p>
 
 A minimal, high-performance fine-grained reactive runtime.
 
