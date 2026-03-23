@@ -1,5 +1,5 @@
 {
-  "name": "lane-x",
+  "name": "kilombo",
   "version": "1.0.10",
   "description": "A minimal, high-performance fine-grained reactive runtime with priority-lane scheduling",
   "main": "dist/index.cjs",
@@ -43,11 +43,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rosano-alex/lane-x.git"
+    "url": "https://github.com/rosano-alex/kilombo.git"
   },
-  "homepage": "https://github.com/rosano-alex/lane-x#readme",
+  "homepage": "https://github.com/rosano-alex/kilombo#readme",
   "bugs": {
-    "url": "https://github.com/rosano-alex/lane-x/issues"
+    "url": "https://github.com/rosano-alex/kilombo/issues"
   },
   "peerDependencies": {
     "react": ">=17.0.0"

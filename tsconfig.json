@@ -6,10 +6,10 @@
     ],
     "rootDir": ".",
     "paths": {
-      "@lane-x": [
+      "@kilombo": [
         "./src/index"
       ],
-      "@lane-x/react": [
+      "@kilombo/react": [
         "./src/react/index"
       ]
     },

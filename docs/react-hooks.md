@@ -1,14 +1,14 @@
 # React Hooks
 
-lane-x provides a set of React hooks that bridge the reactive graph with React's component model. These hooks let you subscribe to pulses, create computed values, run reactive side-effects, and use concurrent lanes — all within standard React components.
+kilombo provides a set of React hooks that bridge the reactive graph with React's component model. These hooks let you subscribe to pulses, create computed values, run reactive side-effects, and use concurrent lanes — all within standard React components.
 
 ## `usePulse<T>(pulse: PulseNode<T>): T`
 
 Subscribes a component to a PulseNode and returns its current value. The component re-renders automatically whenever the pulse changes.
 
 ```tsx
-import { PulseNode } from "lane-x";
-import { usePulse } from "lane-x";
+import { PulseNode } from "kilombo";
+import { usePulse } from "kilombo";
 
 const count = new PulseNode(0);
 
@@ -30,7 +30,7 @@ Under the hood, `usePulse` creates an `EffectNode` that calls `pulse.get()` to e
 Creates a memoized derived value inside a component and re-renders whenever that value changes. Dependencies are tracked automaticaly — no dependency array needed.
 
 ```tsx
-import { PulseNode, useComputed } from "lane-x";
+import { PulseNode, useComputed } from "kilombo";
 
 const price = new PulseNode(29.99);
 const quantity = new PulseNode(3);
@@ -50,7 +50,7 @@ The `ComputedNode` is created once (via `useMemo`) and a bridge `EffectNode` dri
 Executes a render function inside a reactive tracking context so that any pulses accessed during rendering automatically trigger re-renders.
 
 ```tsx
-import { useObserver } from "lane-x";
+import { useObserver } from "kilombo";
 
 const name = new PulseNode("World");
 const greeting = new PulseNode("Hello");
@@ -70,10 +70,10 @@ This is the low-level primitive for fine-grained reactive rendering. Use it when
 
 ## `useEffectPulse(fn: () => void): void`
 
-Runs a reactive side-effect inside a component that re-executes whenever its pulse dependencies change. This is the lane-x equivelent of React's `useEffect`, but with automatic dependency tracking.
+Runs a reactive side-effect inside a component that re-executes whenever its pulse dependencies change. This is the kilombo equivelent of React's `useEffect`, but with automatic dependency tracking.
 
 ```tsx
-import { PulseNode, useEffectPulse } from "lane-x";
+import { PulseNode, useEffectPulse } from "kilombo";
 
 const count = new PulseNode(0);
 
@@ -100,7 +100,7 @@ Key differences from `useEffect`:
 Creates a `Scope` tied to the component's lifecycle. The scope is created on mount and disposed on unmount, automatically cleaning up any reactive nodes created within it.
 
 ```tsx
-import { useScope, EffectNode, ERROR } from "lane-x";
+import { useScope, EffectNode, ERROR } from "kilombo";
 
 function Dashboard() {
   const scope = useScope();
@@ -130,12 +130,12 @@ function Dashboard() {
 
 ## `useZoTransition(): [boolean, (fn: () => void) => void]`
 
-lane-x's equivalent of React's `useTransition`, implemented with concurrent lanes. Returns an `[isPending, startTransition]` tuple.
+kilombo's equivalent of React's `useTransition`, implemented with concurrent lanes. Returns an `[isPending, startTransition]` tuple.
 
 Pulse writes inside `startTransition()` are buffered in a concurrent lane and committed asynchronosly after the callback completes.
 
 ```tsx
-import { PulseNode, useZoTransition, usePulse } from "lane-x";
+import { PulseNode, useZoTransition, usePulse } from "kilombo";
 
 const searchQuery = new PulseNode("");
 const searchResults = new PulseNode<string[]>([]);
@@ -178,7 +178,7 @@ Creates a concurrent lane tied to the component's lifecycle. The lane is created
 Use this when you need fine-grained control over speculative state that outlasts a single `startTransition` call.
 
 ```tsx
-import { useLane, usePulse, PulseNode } from "lane-x";
+import { useLane, usePulse, PulseNode } from "kilombo";
 
 const draft = new PulseNode("");
 
@@ -218,7 +218,7 @@ import {
   useEffectPulse,
   useScope,
   ERROR,
-} from "lane-x";
+} from "kilombo";
 
 // Global reactive state
 const todos = new PulseNode<{ id: number; text: string; done: boolean }[]>([]);

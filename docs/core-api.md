@@ -1,6 +1,6 @@
 # Core API
 
-The core of lane-x consists of three reactive primitves: **PulseNode** for mutable state, **ComputedNode** for derived values, and **EffectNode** for side effects. Together they form a reactive dependency graph where updates propogate automatically.
+The core of kilombo consists of three reactive primitves: **PulseNode** for mutable state, **ComputedNode** for derived values, and **EffectNode** for side effects. Together they form a reactive dependency graph where updates propogate automatically.
 
 ## PulseNode
 
@@ -146,7 +146,7 @@ The constructor immediately executes the function once to establish dependencies
 Effects can be assigned to a specific scheduler lane to control when they execute:
 
 ```ts
-import { LaneTypes } from "lane-x";
+import { LaneTypes } from "kilombo";
 
 // High priority — runs first in the flush cycle
 const urgent = new EffectNode(() => {
@@ -198,11 +198,11 @@ Executes the effect function. Called by the scheduler during the flush cycle. Yo
 Here's a more involved example that shows how all three primitives work in concert:
 
 ```ts
-import { PulseNode, ComputedNode, EffectNode } from "lane-x";
+import { PulseNode, ComputedNode, EffectNode } from "kilombo";
 
 // State
 const todos = new PulseNode<{ text: string; done: boolean }[]>([
-  { text: "Learn lane-x", done: false },
+  { text: "Learn kilombo", done: false },
   { text: "Build something", done: false },
 ]);
 

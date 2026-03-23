@@ -1,22 +1,22 @@
 <p style="text-align: Left;"><img src="../img/nex.png" width="350"></p>
 # Getting Started
 
-lane-x is a minimal, high-performance fine-grained reactive runtime built around signals, computed values, and deterministic scheduling. It's designed as a framework-agnostic reactive engine that can power UI frameworks, state managers, and reactive data piplines.
+kilombo is a minimal, high-performance fine-grained reactive runtime built around signals, computed values, and deterministic scheduling. It's designed as a framework-agnostic reactive engine that can power UI frameworks, state managers, and reactive data piplines.
 
 ## Installation
 
 ```bash
-npm install lane-x
+npm install kilombo
 # or
-yarn add lane-x
+yarn add kilombo
 ```
 
 ## Quick Start
 
-The three core primitves in lane-x are **Pulse** (mutable state), **Computed** (derived state), and **Effect** (side effects).
+The three core primitves in kilombo are **Pulse** (mutable state), **Computed** (derived state), and **Effect** (side effects).
 
 ```ts
-import { PulseNode, ComputedNode, EffectNode } from "lane-x";
+import { PulseNode, ComputedNode, EffectNode } from "kilombo";
 
 // Create a reactive signal
 const count = new PulseNode(0);
@@ -39,7 +39,7 @@ count.set(5);
 
 ## How It Works
 
-When you call `count.get()` inside a computed or effect, lane-x automatically registers that node as a dependecy. When `count.set()` is called later, lane-x knows exactly which nodes need updating and schedules them through its deterministic scheduler.
+When you call `count.get()` inside a computed or effect, kilombo automatically registers that node as a dependecy. When `count.set()` is called later, kilombo knows exactly which nodes need updating and schedules them through its deterministic scheduler.
 
 ```
 PulseNode.set(newValue)
@@ -58,7 +58,7 @@ Only the affected nodes are re-evaluated — no diffing, no virtual DOM, just pr
 Here's a more complete example that demonstrates how pulses, computeds, and effects compose together:
 
 ```ts
-import { PulseNode, ComputedNode, EffectNode } from "lane-x";
+import { PulseNode, ComputedNode, EffectNode } from "kilombo";
 
 // Reactive state
 const price = new PulseNode(29.99);
@@ -91,5 +91,5 @@ Now that you have the basics, explore the rest of the documentaton:
 - [Scheduler](./scheduler.md) — how the deterministic scheduler works
 - [Scopes](./scopes.md) — ownership, cleanup, and algebraic effects
 - [Lanes](./lanes.md) — concurrent execution contexts
-- [React Hooks](./react-hooks.md) — using lane-x with React
+- [React Hooks](./react-hooks.md) — using kilombo with React
 - [Bridge](./bridge.md) — cross-runtime synchronization via Web Workers

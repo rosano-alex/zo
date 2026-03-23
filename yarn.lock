@@ -1428,9 +1428,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lane-x@workspace:.":
+"kilombo@workspace:.":
   version: 0.0.0-use.local
-  resolution: "lane-x@workspace:."
+  resolution: "kilombo@workspace:."
   dependencies:
     "@testing-library/dom": "npm:^10.4.1"
     "@testing-library/jest-dom": "npm:^6.9.1"
