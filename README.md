@@ -2,7 +2,7 @@
 
 A minimal, high-performance fine-grained reactive runtime.
 
-wacho queues reactive work through a priority-lane pipeline (SYNC → USER → TRANSITION → BACKGROUND) and dispatches it via `queueMicrotask`, keeping the main thread responsive while guaranteeing a stable, predictable update order. It draws from Solid, MobX, Angular, and React's scheduler priorities — distilled into a small, framework-agnostic engine.
+Wacho queues reactive work through a priority-lane pipeline (SYNC → USER → TRANSITION → BACKGROUND) and dispatches it via `queueMicrotask`, keeping the main thread responsive while guaranteeing a stable, predictable update order. It draws from Solid, MobX, Angular, and React's scheduler priorities — distilled into a small, framework-agnostic engine.
 
 ## Install
 
