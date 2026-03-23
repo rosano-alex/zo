@@ -1,6 +1,6 @@
 {
   "name": "wacho",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "A minimal, high-performance fine-grained reactive runtime with priority-lane scheduling",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
