@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "isolatedModules": true,
     "types": [
       "vitest/globals"
     ],
     "rootDir": ".",
     "paths": {
-      "@lane-x": [
+      "@codigos/lane-x": [
         "./src/index"
       ],
-      "@lane-x/react": [
+      "@codigos/lane-x/react": [
         "./src/react/index"
       ]
     },
