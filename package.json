@@ -1,6 +1,6 @@
 {
   "name": "sinja",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "A minimal, high-performance fine-grained reactive runtime with priority-lane scheduling",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
