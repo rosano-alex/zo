@@ -1,4 +1,5 @@
 <p style="text-align: Left;"><img src="../img/lane-x.png" width="350"></p>
+
 # Getting Started
 
 lane-x is a minimal, high-performance fine-grained reactive runtime built around signals, computed values, and deterministic scheduling. It's designed as a framework-agnostic reactive engine that can power UI frameworks, state managers, and reactive data piplines.
@@ -6,9 +7,9 @@ lane-x is a minimal, high-performance fine-grained reactive runtime built around
 ## Installation
 
 ```bash
-npm install lane-x
+npm install @codigos/lane-x
 # or
-yarn add lane-x
+yarn add @codigos/lane-x
 ```
 
 ## Quick Start

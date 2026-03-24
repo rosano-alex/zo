@@ -1,5 +1,4 @@
-<p style="text-align: Left;"><img src="img/lane-x.png" width="370"></p>
-
+# Lane-X
 A minimal, high-performance fine-grained reactive runtime.
 
 Lane-x queues reactive work through a priority-lane pipeline (SYNC → USER → TRANSITION → BACKGROUND) and dispatches it via `queueMicrotask`, keeping the main thread responsive while guaranteeing a stable, predictable update order. It draws from Solid, MobX, Angular, and React's scheduler priorities — distilled into a small, framework-agnostic engine.
@@ -7,9 +6,9 @@ Lane-x queues reactive work through a priority-lane pipeline (SYNC → USER → 
 ## Install
 
 ```bash
-npm install lane-x
+npm install @codigos/lane-x
 # or
-yarn add lane-x
+yarn add @codigos/lane-x
 ```
 
 ## Quick Start Guide
