@@ -6,10 +6,10 @@
     ],
     "rootDir": ".",
     "paths": {
-      "@sinja": [
+      "@lane-x": [
         "./src/index"
       ],
-      "@sinja/react": [
+      "@lane-x/react": [
         "./src/react/index"
       ]
     },

@@ -1,6 +1,6 @@
 # Scheduler
 
-sinja uses a deterministic scheduler with priority lanes to control when effects execute. This guarentees that updates happen in a predictable order, regardless of when signals are written.
+lane-x uses a deterministic scheduler with priority lanes to control when effects execute. This guarentees that updates happen in a predictable order, regardless of when signals are written.
 
 ## How Scheduling Works
 
@@ -32,7 +32,7 @@ The scheduler maintains four priority lanes, flushed in strict order:
 Effects are assigned to a lane at construction time:
 
 ```ts
-import { EffectNode, LaneTypes } from "sinja";
+import { EffectNode, LaneTypes } from "lane-x";
 
 // Runs before everything else in the flush cycle
 const criticalEffect = new EffectNode(() => {
@@ -108,10 +108,10 @@ Adds a node to the appropriate lane queue and kicks off a flush if one isn't alr
 
 ## The Global Clock
 
-sinja maintains a global epoch counter (in `clock.ts`) that increments every time any pulse is set. Computed nodes use this epoch to determine if they might be stale — if their `lastEpoch` doesn't match the global epoch, they know a dependency might have changed and they need to recheck.
+lane-x maintains a global epoch counter (in `clock.ts`) that increments every time any pulse is set. Computed nodes use this epoch to determine if they might be stale — if their `lastEpoch` doesn't match the global epoch, they know a dependency might have changed and they need to recheck.
 
 ```ts
-import { epoch, tick } from "sinja";
+import { epoch, tick } from "lane-x";
 
 console.log(epoch); // current epoch value
 tick(); // manually advance the epoch (rarely needed)
