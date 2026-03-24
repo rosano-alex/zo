@@ -16,7 +16,7 @@ import type { Node } from "./node";
  * usePulse
  * ---------
  *
- * Subscribes a React component to a kilombo pulseNode and returns its
+ * Subscribes a React component to a sinja pulseNode and returns its
  * current value.
  *
  * Whenever the pulse's value changes, the component re-renders
@@ -220,9 +220,9 @@ export function useObserver(
  * ---------------
  *
  * Runs a reactive side-effect inside a React component that automatically
- * re-executes whenever its kilombo pulse dependencies change.
+ * re-executes whenever its sinja pulse dependencies change.
  *
- * This is the kilombo equivalent of React's useEffect, but dependency
+ * This is the sinja equivalent of React's useEffect, but dependency
  * tracking is automatic — you do not need to declare a dependency array.
  * Any pulses read inside `fn` are tracked and will trigger a re-run.
  *
@@ -250,7 +250,7 @@ export function useObserver(
  * Difference from useEffect:
  *
  *   useEffect   → you declare deps manually, React re-runs on dep changes
- *   useEffectpulse → deps are tracked automatically, kilombo re-runs on pulse changes
+ *   useEffectpulse → deps are tracked automatically, sinja re-runs on pulse changes
  *
  * @param fn - The side-effect function. May read any number of pulses.
  */
@@ -330,14 +330,14 @@ export function useScope(): Scope {
 }
 
 // ##############################
-// useTransition (kilombo)
+// useTransition (sinja)
 // ##############################
 
 /**
  * useZoTransition
  * -------------------
  *
- * kilombo's equivalent of React's useTransition, implemented using
+ * sinja's equivalent of React's useTransition, implemented using
  * concurrent lanes.
  *
  * Returns a [isPending, startTransition] tuple. pulse writes inside

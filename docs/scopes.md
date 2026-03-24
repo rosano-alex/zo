@@ -1,13 +1,13 @@
 # Scopes & Algebraic Effects
 
-Scopes provide two key capabilities in kilombo: **ownership** (automatic cleanup of reactive nodes) and **algebraic effects** (a composable error-handling and control-flow mechanism inspired by languages like Koka and OCaml 5).
+Scopes provide two key capabilities in sinja: **ownership** (automatic cleanup of reactive nodes) and **algebraic effects** (a composable error-handling and control-flow mechanism inspired by languages like Koka and OCaml 5).
 
 ## Ownership
 
 A `Scope` owns the reactive nodes created within it. When the scope is disposed, all owned nodes are torn down automaticaly — child scopes first, then owned nodes, then cleanup callbacks.
 
 ```ts
-import { Scope, PulseNode, ComputedNode, EffectNode } from "kilombo";
+import { Scope, PulseNode, ComputedNode, EffectNode } from "sinja";
 
 const scope = new Scope();
 
@@ -45,7 +45,7 @@ root.dispose();
 The `createScope()` convenience function creates a new scope that is automaticaly a child of the currently active scope (if any):
 
 ```ts
-import { createScope } from "kilombo";
+import { createScope } from "sinja";
 
 const root = new Scope();
 root.run(() => {
@@ -72,7 +72,7 @@ scope.run(() => {
 });
 
 // or use the module-level convenience:
-import { onCleanup } from "kilombo";
+import { onCleanup } from "sinja";
 
 scope.run(() => {
   const ws = new WebSocket("wss://example.com");
@@ -92,7 +92,7 @@ Algebraic effects let a computation "perform" an operation without knowing how i
 ### Defining Effects
 
 ```ts
-import { defineEffect } from "kilombo";
+import { defineEffect } from "sinja";
 
 // Define a custom effect with typed payload and resume value
 const LOG = defineEffect<string, void>("log");
@@ -120,7 +120,7 @@ The handler recieves two arguments: the payload and a `resume` callback. Calling
 ### Performing Effects
 
 ```ts
-import { perform } from "kilombo";
+import { perform } from "sinja";
 
 scope.run(() => {
   perform(LOG, "starting computation");
@@ -132,14 +132,14 @@ The runtime walks up the scope tree to find the nearest handler for the given ef
 
 ### Built-in Effects
 
-kilombo provides three built-in effect keys:
+sinja provides three built-in effect keys:
 
 #### `ERROR`
 
 Fired when an effect throws. Install a handler to catch errors without crashing the reactive graph:
 
 ```ts
-import { ERROR } from "kilombo";
+import { ERROR } from "sinja";
 
 const root = new Scope();
 
@@ -162,7 +162,7 @@ root.run(() => {
 Fired when a scope is about to be disposed. Handlers can perform final cleanup or logging:
 
 ```ts
-import { DISPOSE } from "kilombo";
+import { DISPOSE } from "sinja";
 
 scope.handle(DISPOSE, (disposingScope, resume) => {
   console.log("Scope is being disposed, flushing pending writes...");
@@ -176,7 +176,7 @@ scope.handle(DISPOSE, (disposingScope, resume) => {
 Wraps a batch of pulse writes into an atomic unit:
 
 ```ts
-import { TRANSACTION } from "kilombo";
+import { TRANSACTION } from "sinja";
 
 scope.handle(TRANSACTION, (fn, resume) => {
   batch(fn);

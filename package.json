@@ -1,5 +1,5 @@
 {
-  "name": "kilombo",
+  "name": "sinja",
   "version": "1.0.20",
   "description": "A minimal, high-performance fine-grained reactive runtime with priority-lane scheduling",
   "main": "dist/index.cjs",
@@ -27,7 +27,8 @@
     "build": "tsup",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build",
+    "bump": "npm run  ./scripts/bump-version.js"
   },
   "keywords": [
     "reactive",
@@ -43,11 +44,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rosano-alex/kilombo.git"
+    "url": "git+https://github.com/rosano-alex/sinja.git"
   },
-  "homepage": "https://github.com/rosano-alex/kilombo#readme",
+  "homepage": "https://github.com/rosano-alex/sinja#readme",
   "bugs": {
-    "url": "https://github.com/rosano-alex/kilombo/issues"
+    "url": "https://github.com/rosano-alex/sinja/issues"
   },
   "peerDependencies": {
     "react": ">=17.0.0"

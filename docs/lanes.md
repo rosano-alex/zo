@@ -1,13 +1,13 @@
 # Lanes (Concurrent Execution)
 
-Lanes are kilombo's mechanism for concurrent, speculative state updates. They provide isolated execution contexts where pulse writes are buffered without mutating the base reactive graph — similar to how React's concurrent rendering handles transitions.
+Lanes are sinja's mechanism for concurrent, speculative state updates. They provide isolated execution contexts where pulse writes are buffered without mutating the base reactive graph — similar to how React's concurrent rendering handles transitions.
 
 ## Core Concept
 
 A lane captures pulse writes in an override layer. The base graph remains unchanged until the lane is explicitly committed. This enables speculative updates, optimistic UI, and interruptible transitions.
 
 ```ts
-import { forkLane } from "kilombo";
+import { forkLane } from "sinja";
 
 const count = new PulseNode(0);
 
@@ -46,10 +46,10 @@ const lane = forkLane("transition");
 
 ### `transition(fn: () => void): void`
 
-Convenience function that creates a transition-priority lane, runs a function in it, and commits the result. This is the kilombo equivelant of React's `startTransition()`.
+Convenience function that creates a transition-priority lane, runs a function in it, and commits the result. This is the sinja equivelant of React's `startTransition()`.
 
 ```ts
-import { transition } from "kilombo";
+import { transition } from "sinja";
 
 transition(() => {
   searchFilter.set("new query");
@@ -63,7 +63,7 @@ transition(() => {
 Runs a function in a lane without committing, returning the lane for inspection. Use this when you want to preview the results of a state change before deciding wether to keep or discard it.
 
 ```ts
-import { speculate } from "kilombo";
+import { speculate } from "sinja";
 
 const lane = speculate(() => {
   expensiveData.set(newData);

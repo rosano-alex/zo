@@ -6,10 +6,10 @@
     ],
     "rootDir": ".",
     "paths": {
-      "@kilombo": [
+      "@sinja": [
         "./src/index"
       ],
-      "@kilombo/react": [
+      "@sinja/react": [
         "./src/react/index"
       ]
     },

@@ -1,7 +1,7 @@
 import React, {
   useState, useEffect, useRef, useCallback, memo
 } from 'react';
-import { PulseNode, ComputedNode, EffectNode } from 'kilombo';
+import { PulseNode, ComputedNode, EffectNode } from 'sinja';
 import './App.css';
 
 // Code was generated using claude
@@ -149,7 +149,7 @@ function VanillaDemo({ prices, onRender }: VanillaProps) {
   );
 }
 
-// =======kilombo demo 
+// =======sinja demo 
 
 // Module-level pulses — one per coin, created once
 const stockPulses: PulseNode<number>[] = initPrices().map(p => new PulseNode(p));
@@ -244,7 +244,7 @@ function ZoDemo({ onRender }: { onRender: (count: number) => void }) {
       <div className="dashboard-header">
         <div>
           <div className="dashboard-title">
-            <span className="highlight">kilombo + React</span> — Portfolio
+            <span className="highlight">sinja + React</span> — Portfolio
           </div>
           <div className="render-counter">Only changed cells re-render</div>
         </div>
@@ -300,7 +300,7 @@ function Scoreboard({ STANDARD, laneX }: { STANDARD: BenchStats; laneX: BenchSta
           <div className="metric-row"><span className="metric-label">Renders/tick</span><span className="metric-val">{STANDARD.ticks > 0 ? fmtR(STANDARD.renders / STANDARD.ticks) : '—'}</span></div>
         </div>
         <div className="score-card laneX">
-          <div className="score-card-header">kilombo + React</div>
+          <div className="score-card-header">sinja + React</div>
           <div className="metric-row"><span className="metric-label">Avg render</span><span className="metric-val">{fmt(laneX.avgMs)}</span></div>
           <div className="metric-row"><span className="metric-label">Min / Max</span><span className="metric-val">{fmt(laneX.minMs)} / {fmt(laneX.maxMs)}</span></div>
           <div className="metric-row"><span className="metric-label">Total renders</span><span className="metric-val">{fmtR(laneX.renders)}</span></div>
@@ -323,7 +323,7 @@ export default function App() {
   const [prices, setPrices] = useState<number[]>(initPrices);
   const [vanillaRenders, setVanillaRenders] = useState(0);
 
-  // kilombo render count
+  // sinja render count
   const [laneXRenders, setZoRenders] = useState(0);
 
   // Timing history
@@ -461,7 +461,7 @@ export default function App() {
   return (
     <div className="app">
       <div className="header">
-        <h1><span>kilombo + React</span> Performance Demo</h1>
+        <h1><span>sinja + React</span> Performance Demo</h1>
         <span className="badge">100 coins · 5 categories · 1 portfolio total</span>
         <span className="badge">tick #{tickCount}</span>
       </div>
@@ -512,7 +512,7 @@ export default function App() {
               <span className="stat-val bad">{vanillaRenders}</span>
             </div>
             <div className="stat-row">
-              <span className="stat-label">kilombo + React renders/tick</span>
+              <span className="stat-label">sinja + React renders/tick</span>
               <span className="stat-val good">{laneXRenders}</span>
             </div>
             {reducedRenders !== null && (
@@ -526,13 +526,13 @@ export default function App() {
               <span className="stat-val">{vanillaStats.avgMs.toFixed(2)}ms</span>
             </div>
             <div className="stat-row">
-              <span className="stat-label">kilombo + React avg</span>
+              <span className="stat-label">sinja + React avg</span>
               <span className="stat-val">{zoStats.avgMs.toFixed(2)}ms</span>
             </div>
           </div>
 
           <div className="explanation">
-            <h3>Why kilombo + React wins</h3>
+            <h3>Why sinja + React wins</h3>
             <p>
               Each tick, <strong>{changesPerTick} of 100 coins</strong> change price.
             </p>
@@ -545,7 +545,7 @@ export default function App() {
             </p>
             <br />
             <p>
-              <span className="highlight">kilombo + React</span> gives each coin its own
+              <span className="highlight">sinja + React</span> gives each coin its own
               <code> PulseNode</code>. A <code>PulseNode.set()</code> only marks
               <em> that node's</em> observers dirty. Only the {changesPerTick} affected
               cells re-render. The {100 - changesPerTick} untouched coins are never
