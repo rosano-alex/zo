@@ -128,20 +128,20 @@ function Dashboard() {
 }
 ```
 
-## `useZoTransition(): [boolean, (fn: () => void) => void]`
+## `useLaneXTransition(): [boolean, (fn: () => void) => void]`
 
 lane-x's equivalent of React's `useTransition`, implemented with concurrent lanes. Returns an `[isPending, startTransition]` tuple.
 
 Pulse writes inside `startTransition()` are buffered in a concurrent lane and committed asynchronosly after the callback completes.
 
 ```tsx
-import { PulseNode, useZoTransition, usePulse } from "lane-x";
+import { PulseNode, useLaneXTransition, usePulse } from "lane-x";
 
 const searchQuery = new PulseNode("");
 const searchResults = new PulseNode<string[]>([]);
 
 function SearchPage() {
-  const [isPending, startTransition] = useZoTransition();
+  const [isPending, startTransition] = useLaneXTransition();
   const query = usePulse(searchQuery);
   const results = usePulse(searchResults);
 

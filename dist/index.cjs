@@ -50,12 +50,12 @@ __export(index_exports, {
   tick: () => tick,
   transition: () => transition,
   useComputed: () => useComputed,
-  useEffectpulse: () => useEffectpulse,
+  useEffectPulse: () => useEffectPulse,
   useLane: () => useLane,
   useObserver: () => useObserver,
   usePulse: () => usePulse,
   useScope: () => useScope,
-  useZoTransition: () => useZoTransition
+  useLaneXTransition: () => useLaneXTransition
 });
 module.exports = __toCommonJS(index_exports);
 
@@ -1362,7 +1362,7 @@ function useObserver(render) {
   }
   return result;
 }
-function useEffectpulse(fn) {
+function useEffectPulse(fn) {
   (0, import_react.useEffect)(() => {
     const effect = new EffectNode(fn);
     return () => effect.dispose();
@@ -1383,7 +1383,7 @@ function useScope() {
   }, []);
   return scopeRef.current;
 }
-function useZoTransition() {
+function useLaneXTransition() {
   const [isPending, setIsPending] = (0, import_react.useState)(false);
   const laneRef = (0, import_react.useRef)(null);
   const startTransition = (0, import_react.useCallback)((fn) => {
@@ -1457,10 +1457,10 @@ function useLane(priority = "transition") {
   tick,
   transition,
   useComputed,
-  useEffectpulse,
+  useEffectPulse,
   useLane,
   useObserver,
   usePulse,
   useScope,
-  useZoTransition
+  useLaneXTransition
 });

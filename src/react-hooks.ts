@@ -212,11 +212,11 @@ export function useObserver(
 }
 
 // ##############################
-// useEffectpulse
+// useEffectPulse
 // ##############################
 
 /**
- * useEffectpulse
+ * useEffectPulse
  * ---------------
  *
  * Runs a reactive side-effect inside a React component that automatically
@@ -231,7 +231,7 @@ export function useObserver(
  *   const count = new pulseNode(0)
  *
  *   function Logger() {
- *     useEffectpulse(() => {
+ *     useEffectPulse(() => {
  *       console.log("count is now:", count.get())
  *     })
  *     return null
@@ -250,11 +250,11 @@ export function useObserver(
  * Difference from useEffect:
  *
  *   useEffect   → you declare deps manually, React re-runs on dep changes
- *   useEffectpulse → deps are tracked automatically, lane-x re-runs on pulse changes
+ *   useEffectPulse → deps are tracked automatically, lane-x re-runs on pulse changes
  *
  * @param fn - The side-effect function. May read any number of pulses.
  */
-export function useEffectpulse(fn: () => void) {
+export function useEffectPulse(fn: () => void) {
   useEffect(() => {
     // Create the reactive effect. The EffectNode constructor calls fn()
     // immediately to establish the initial set of pulse dependencies.
@@ -334,7 +334,7 @@ export function useScope(): Scope {
 // ##############################
 
 /**
- * useZoTransition
+ * useLaneXTransition
  * -------------------
  *
  * lane-x's equivalent of React's useTransition, implemented using
@@ -351,7 +351,7 @@ export function useScope(): Scope {
  * Usage:
  *
  *   function SearchPage() {
- *     const [isPending, startTransition] = useZoTransition()
+ *     const [isPending, startTransition] = useLaneXTransition()
  *
  *     return (
  *       <div>
@@ -372,7 +372,7 @@ export function useScope(): Scope {
  *
  * @returns [isPending: boolean, startTransition: (fn: () => void) => void]
  */
-export function useZoTransition(): [boolean, (fn: () => void) => void] {
+export function useLaneXTransition(): [boolean, (fn: () => void) => void] {
   const [isPending, setIsPending] = useState(false);
   const laneRef = useRef<Lane | null>(null);
 

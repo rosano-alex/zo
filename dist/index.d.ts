@@ -1,4 +1,4 @@
-// Zo reactive runtime — public type declarations
+// laneX reactive runtime — public type declarations
 
 export { NodeFlags } from '../src/node';
 export type { Node } from '../src/node';
@@ -19,6 +19,6 @@ export {
 export type { Priority, Lane } from '../src/lane';
 export {
   usePulse, useComputed, useObserver,
-  useEffectpulse, useScope, useZoTransition, useLane,
+  useEffectPulse, useScope, useLaneXTransition, useLane,
 } from '../src/react-hooks';
 export { GraphBridge, RemotePulse, RemoteComputed } from '../src/bridge';

@@ -106,7 +106,7 @@ describe('EffectNode', () => {
 
   // BUG FIX VERIFICATION: dispose() sets the DISPOSED flag, which
   // causes mark() to return imediately without scheduling. This
-  // prevents zombie effects from being re-queued after dispsal.
+  // prevents laneXmbie effects from being re-queued after dispsal.
   //
   // Previously, dispose() only set flags to CLEAN, and mark() had
   // no guard — so a disposed effect could be re-shceduled.

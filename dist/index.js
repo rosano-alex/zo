@@ -1301,7 +1301,7 @@ function useObserver(render) {
   }
   return result;
 }
-function useEffectpulse(fn) {
+function useEffectPulse(fn) {
   useEffect(() => {
     const effect = new EffectNode(fn);
     return () => effect.dispose();
@@ -1322,7 +1322,7 @@ function useScope() {
   }, []);
   return scopeRef.current;
 }
-function useZoTransition() {
+function useLaneXTransition() {
   const [isPending, setIsPending] = useState(false);
   const laneRef = useRef(null);
   const startTransition = useCallback((fn) => {
@@ -1395,10 +1395,10 @@ export {
   tick,
   transition,
   useComputed,
-  useEffectpulse,
+  useEffectPulse,
   useLane,
   useObserver,
   usePulse,
   useScope,
-  useZoTransition
+  useLaneXTransition
 };
