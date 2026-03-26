@@ -15,6 +15,9 @@ jobs:
       contents: read
       id-token: write # needed for npm provenance
     steps:
+      - name: Prevent line-ending corruption of Yarn binary
+        run: git config --global core.autocrlf false
+
       - name: Checkout
         uses: actions/checkout@v4
 

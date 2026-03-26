@@ -1,3 +1,8 @@
 *.pbxproj -text
 # specific for windows script files
 *.bat text eol=crlf
+
+# Yarn releases contain embedded binary data (Brotli-compressed patches)
+# that must not be modified by git line-ending normalization
+.yarn/releases/** binary
+.yarn/plugins/** binary
