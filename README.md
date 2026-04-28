@@ -3,21 +3,21 @@
 
 Lane-x queues reactive work through a priority-lane pipeline (SYNC → USER → TRANSITION → BACKGROUND) and dispatches it via `queueMicrotask`, keeping the main thread responsive while guaranteeing a stable, predictable update order. It draws from Solid, MobX, Angular, and React's scheduler priorities — distilled into a small, framework-agnostic engine.
 
-##Where lane-x Is Useful
+## Where lane-x Is Useful
 
-####High-frequency UI state that causes Redux/Context re-render storms
+#### High-frequency UI state that causes Redux/Context re-render storms
 In apps with real-time data, pulse.set() triggers only the components that actually read that pulse. Not every subscriber to a Redux store slice. For a QSR client with live order status updating at high frequency, this is the difference between a smooth UI and a dropped-frame scroll list.
 
-###Concurrent updates without React.startTransition boilerplate
+### Concurrent updates without React.startTransition boilerplate
 The useLaneXTransition hook gives the same deferred-commit semantics as React's startTransition but for reactive state outside of React's rendering model. Useful for search-as-you-type.
 
-####Draft/preview patterns (editors, forms with live preview)
+#### Draft/preview patterns (editors, forms with live preview)
 The speculate() API and useLane() hook enable optimistic preview patterns: the editor writes to a lane, the preview UI reads from that lane, and the user can commit or discard. This is cleaner than maintaining a separate draft copy of state. The lane IS the draft, and the base graph IS the committed truth.
 
-####Automatic memory management for complex component trees
+#### Automatic memory management for complex component trees
 With useScope(), all reactive nodes created during a component's lifetime are automatically disposed when the component unmounts. No manual cleanup arrays, no forgotten unsubscribe calls.
 
-####Web Worker offloading for expensive computations
+#### Web Worker offloading for expensive computations
 The GraphBridge enables running expensive ComputedNodes in a Web Worker while the main thread reactive graph remains responsive.
 
 
